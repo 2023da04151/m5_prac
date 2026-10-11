@@ -1,0 +1,27 @@
+[project]
+name = "m5-pipe-line"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "lightgbm>=4.7.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.4.6",
+    "pandas>=3.0.6",
+    "pyyaml>=6.0.3",
+    "ruff>=0.16.10",
+    "scikit-learn>=1.9.1",
+    "seaborn>=0.13.2",
+]
+
+[dependency-groups]
+dev = [
+    "awscli>=1.46.1",
+    "dvc>=3.67.1",
+    "ipykernel>=7.4.0",
+    "jupyter>=1.1.1",
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]
