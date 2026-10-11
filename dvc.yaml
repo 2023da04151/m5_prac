@@ -1,0 +1,14 @@
+stages:
+  preprocessing:
+    cmd: python src/data/preprocessing.py
+    deps:
+      - src/data/preprocessing.py
+      - data/raw/sales_train_evaluation.csv
+      - data/raw/sell_prices.csv
+      - data/raw/calendar.csv
+    outs:
+      - data/processed/grid_part_1.pkl
+      - data/processed/grid_part_2.pkl
+      - data/processed/grid_part_3.pkl
+      - data/processed/lags_df_28.pkl
+      - data/processed/mean_encoding_df.pkl

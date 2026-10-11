@@ -1,0 +1,42 @@
+schema: '2.0'
+stages:
+  preprocessing:
+    cmd: python src/data/preprocessing.py
+    deps:
+    - path: data/raw/calendar.csv
+      hash: md5
+      md5: 3ffeab2991b0c8e861d008b39ea4c95c
+      size: 103469
+    - path: data/raw/sales_train_evaluation.csv
+      hash: md5
+      md5: b806dfc9f30a745102b708c09951f6aa
+      size: 121736518
+    - path: data/raw/sell_prices.csv
+      hash: md5
+      md5: 08c591caa99e55daf3e0ccac913f7c85
+      size: 203395785
+    - path: src/data/preprocessing.py
+      hash: md5
+      md5: fd272fad667ebb3520cb8662d6d783d7
+      size: 11020
+    outs:
+    - path: data/processed/grid_part_1.pkl
+      hash: md5
+      md5: c20dcf2f68ed191e020c382478cbd260
+      size: 669314030
+    - path: data/processed/grid_part_2.pkl
+      hash: md5
+      md5: eecb2e333cd210f60490a3852e671564
+      size: 1385296294
+    - path: data/processed/grid_part_3.pkl
+      hash: md5
+      md5: 4d2becbd609763bd4ec5a1b4c588b9a4
+      size: 3358354995
+    - path: data/processed/lags_df_28.pkl
+      hash: md5
+      md5: c9308575284823172bfa6d282d64d101
+      size: 4965452621
+    - path: data/processed/mean_encoding_df.pkl
+      hash: md5
+      md5: b81c782215071a4fae0d068bd774950d
+      size: 4392627757
