@@ -8,5 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+.env
 dvc_data/
 data/
+/experiment_info.json

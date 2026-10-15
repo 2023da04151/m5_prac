@@ -17,26 +17,137 @@ stages:
       size: 203395785
     - path: src/data/preprocessing.py
       hash: md5
-      md5: fd272fad667ebb3520cb8662d6d783d7
-      size: 11020
+      md5: 8748aa3679ccab1996d37c3b8350dcd0
+      size: 10975
     outs:
     - path: data/processed/grid_part_1.pkl
       hash: md5
-      md5: c20dcf2f68ed191e020c382478cbd260
-      size: 669314030
+      md5: 3f1b937cefd4dcf3adcea2935b599b35
+      size: 669481938
     - path: data/processed/grid_part_2.pkl
       hash: md5
-      md5: eecb2e333cd210f60490a3852e671564
-      size: 1385296294
+      md5: cd497f8545fc83db626dce820d48eb35
+      size: 1385448621
     - path: data/processed/grid_part_3.pkl
       hash: md5
-      md5: 4d2becbd609763bd4ec5a1b4c588b9a4
-      size: 3358354995
+      md5: 255a89f6d65390ded38fa5afc6bf9573
+      size: 3303458199
     - path: data/processed/lags_df_28.pkl
       hash: md5
-      md5: c9308575284823172bfa6d282d64d101
-      size: 4965452621
+      md5: 2fc90bff04189eb0920a1ef54ea992e2
+      size: 4965604817
     - path: data/processed/mean_encoding_df.pkl
       hash: md5
-      md5: b81c782215071a4fae0d068bd774950d
-      size: 4392627757
+      md5: 965e96906753fed5684415fca7749d55
+      size: 4392779974
+  model_building:
+    cmd: python src/model/model_building.py
+    deps:
+    - path: data/processed/grid_part_1.pkl
+      hash: md5
+      md5: 3f1b937cefd4dcf3adcea2935b599b35
+      size: 669481938
+    - path: data/processed/grid_part_2.pkl
+      hash: md5
+      md5: cd497f8545fc83db626dce820d48eb35
+      size: 1385448621
+    - path: data/processed/grid_part_3.pkl
+      hash: md5
+      md5: 255a89f6d65390ded38fa5afc6bf9573
+      size: 3303458199
+    - path: data/processed/lags_df_28.pkl
+      hash: md5
+      md5: 2fc90bff04189eb0920a1ef54ea992e2
+      size: 4965604817
+    - path: data/processed/mean_encoding_df.pkl
+      hash: md5
+      md5: 965e96906753fed5684415fca7749d55
+      size: 4392779974
+    - path: src/model/model_building.py
+      hash: md5
+      md5: 869315240daf3e6ad390a40c1c81e33e
+      size: 13558
+    params:
+      params.yaml:
+        model_building:
+          data_dir: data/processed
+          model_dir: models
+          store: CA_1
+          cv: cv4
+          first_day: 710
+          max_items:
+          num_threads: 0
+          num_boost_round: 1500
+          early_stopping: 50
+          force: false
+          lgb_params:
+            boosting_type: gbdt
+            objective: tweedie
+            tweedie_variance_power: 1.1
+            metric: rmse
+            learning_rate: 0.05
+            num_leaves: 255
+            min_data_in_leaf: 255
+            subsample: 0.5
+            subsample_freq: 1
+            feature_fraction: 0.5
+            max_bin: 100
+            boost_from_average: false
+            verbose: -1
+            seed: 1995
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 304a0ae1551293eeb9489cb268f1c6ca
+      size: 12250486
+    - path: models/non_recur_CA_1_cv4.txt
+      hash: md5
+      md5: 2de786253d399c9059b18d6f24114159
+      size: 12200715
+    - path: models/non_recur_CA_1_cv4_meta.json
+      hash: md5
+      md5: 340a4e206c27a961abb59c55476cf545
+      size: 1976
+    - path: models/non_recur_CA_1_cv4_predictions.csv
+      hash: md5
+      md5: 6d226da7461f1388db1debde8e005700
+      size: 5019290
+  model_evaluation:
+    cmd: python src/model/model_evaluation.py
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: 304a0ae1551293eeb9489cb268f1c6ca
+      size: 12250486
+    - path: models/non_recur_CA_1_cv4_predictions.csv
+      hash: md5
+      md5: 6d226da7461f1388db1debde8e005700
+      size: 5019290
+    - path: src/model/model_evaluation.py
+      hash: md5
+      md5: 0e6a878f8760d32fb3282681a90b0310
+      size: 6068
+    params:
+      params.yaml:
+        model_evaluation:
+          predictions_path: models/non_recur_CA_1_cv4_predictions.csv
+          model_path: models/model.pkl
+          experiment_info_path: experiment_info.json
+          experiment_name: m5_forecasting_dvcpipeline
+          run_name: lgb_CA_1_cv4_evaluation
+    outs:
+    - path: experiment_info.json
+      hash: md5
+      md5: 5b76779d947d543df320439341dc0ce0
+      size: 78
+  model_registry:
+    cmd: python src/model/model_registry.py
+    deps:
+    - path: experiment_info.json
+      hash: md5
+      md5: 5b76779d947d543df320439341dc0ce0
+      size: 78
+    - path: src/model/model_registry.py
+      hash: md5
+      md5: 92e2229eda9e7cef9b4adfb4fdd9bc94
+      size: 3737

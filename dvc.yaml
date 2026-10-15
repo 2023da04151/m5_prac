@@ -12,3 +12,35 @@ stages:
       - data/processed/grid_part_3.pkl
       - data/processed/lags_df_28.pkl
       - data/processed/mean_encoding_df.pkl
+  model_building:
+    cmd: python src/model/model_building.py
+    deps:
+      - src/model/model_building.py
+      - data/processed/grid_part_1.pkl
+      - data/processed/grid_part_2.pkl
+      - data/processed/grid_part_3.pkl
+      - data/processed/lags_df_28.pkl
+      - data/processed/mean_encoding_df.pkl
+    params:
+      - model_building
+    outs:
+      - models/non_recur_CA_1_cv4.txt
+      - models/non_recur_CA_1_cv4_predictions.csv
+      - models/non_recur_CA_1_cv4_meta.json
+      - models/model.pkl
+  model_evaluation:
+    cmd: python src/model/model_evaluation.py
+    deps:
+      - src/model/model_evaluation.py
+      - models/non_recur_CA_1_cv4_predictions.csv
+      - models/model.pkl
+    params:
+      - model_evaluation
+    outs:
+      - experiment_info.json
+  model_registry:
+    cmd: python src/model/model_registry.py
+    deps:
+      - src/model/model_registry.py
+      - experiment_info.json
+

@@ -1,0 +1,547 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R 12 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 2073 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 54 742 Tm
+(MLflow Tracking Server on AWS: Industry-Style Flow) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Goal) Tj
+0 -14 Td
+(Set up MLflow so experiments are tracked centrally, model/artifact files are stored) Tj
+0 -14 Td
+(durably in S3, metadata is stored in a database, and access is controlled securely.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(High-Level Architecture) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Developer / Training Job) Tj
+0 -14 Td
+(        |) Tj
+0 -14 Td
+(        | logs params, metrics, models, plots) Tj
+0 -14 Td
+(        v) Tj
+0 -14 Td
+(MLflow Tracking Server on EC2 / ECS / EKS / Docker) Tj
+0 -14 Td
+(        |) Tj
+0 -14 Td
+(        | metadata: experiments, runs, params, metrics, tags) Tj
+0 -14 Td
+(        v) Tj
+0 -14 Td
+(PostgreSQL or MySQL, commonly AWS RDS) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(MLflow Tracking Server) Tj
+0 -14 Td
+(        |) Tj
+0 -14 Td
+(        | artifacts: model files, plots, reports, feature outputs) Tj
+0 -14 Td
+(        v) Tj
+0 -14 Td
+(S3 bucket) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(IAM Role) Tj
+0 -14 Td
+(        |) Tj
+0 -14 Td
+(        | allows MLflow server to access only the required S3 bucket/prefix) Tj
+0 -14 Td
+(        v) Tj
+0 -14 Td
+(S3 artifact storage) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Security Layer) Tj
+0 -14 Td
+(        |) Tj
+0 -14 Td
+(        | private VPC, security groups, VPN, reverse proxy, auth, TLS) Tj
+0 -14 Td
+(        v) Tj
+0 -14 Td
+(MLflow UI / API) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Recommended AWS Components) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(1. Compute) Tj
+0 -14 Td
+(   - Simple setup: EC2 instance running MLflow.) Tj
+0 -14 Td
+(   - More production-style: Docker container on ECS or EKS.) Tj
+0 -14 Td
+(   - For your current learning/project flow, EC2 is easiest.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(2. Backend Store) Tj
+0 -14 Td
+(   - Use PostgreSQL or MySQL for MLflow metadata.) Tj
+0 -14 Td
+(   - AWS managed option: RDS PostgreSQL.) Tj
+0 -14 Td
+(   - Avoid using ./mlruns on EC2 for important work because EC2 disk is not a durable) Tj
+0 -14 Td
+(     central metadata store.) Tj
+0 -14 Td
+() Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 54 36 Tm
+(Page 1 of 5) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2244 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 54 742 Tm
+(3. Artifact Store) Tj
+0 -14 Td
+(   - Use S3 for artifacts.) Tj
+0 -14 Td
+(   - Store models, plots, evaluation reports, confusion matrices, and other large files.) Tj
+0 -14 Td
+(   - Example artifact root:) Tj
+0 -14 Td
+(     s3://your-mlflow-bucket/mlflow-artifacts) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(4. IAM) Tj
+0 -14 Td
+(   - Attach an IAM role to the EC2 instance or container task.) Tj
+0 -14 Td
+(   - Give permission only to the specific S3 bucket/prefix used by MLflow.) Tj
+0 -14 Td
+(   - Avoid broad AmazonS3FullAccess in serious projects.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5. Network and Security) Tj
+0 -14 Td
+(   - Do not expose MLflow openly to the internet unless protected.) Tj
+0 -14 Td
+(   - Prefer private subnet access, VPN, or an authenticated reverse proxy.) Tj
+0 -14 Td
+(   - Use security groups to restrict port 5000 or proxy ports to trusted IPs.) Tj
+0 -14 Td
+(   - Add TLS/HTTPS when exposing a UI/API.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step-by-Step AWS Flow) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 1: Create an S3 bucket for MLflow artifacts) Tj
+0 -14 Td
+(Example:) Tj
+0 -14 Td
+(  s3://your-mlflow-bucket/mlflow-artifacts) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Keep bucket versioning enabled if this is important project work.) Tj
+0 -14 Td
+(Block public access unless there is a very specific reason not to.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 2: Create a database for MLflow metadata) Tj
+0 -14 Td
+(Recommended:) Tj
+0 -14 Td
+(  AWS RDS PostgreSQL) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Example database:) Tj
+0 -14 Td
+(  database name: mlflowdb) Tj
+0 -14 Td
+(  user: mlflow_user) Tj
+0 -14 Td
+(  password: stored in AWS Secrets Manager or environment variable) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(The backend store will hold:) Tj
+0 -14 Td
+(  - experiment names) Tj
+0 -14 Td
+(  - run IDs) Tj
+0 -14 Td
+(  - params) Tj
+0 -14 Td
+(  - metrics) Tj
+0 -14 Td
+(  - tags) Tj
+0 -14 Td
+(  - artifact locations) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 3: Create IAM role for the MLflow server) Tj
+0 -14 Td
+(Attach the role to EC2/ECS.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Minimum S3 permissions usually include:) Tj
+0 -14 Td
+(  - s3:ListBucket on the artifact bucket) Tj
+0 -14 Td
+(  - s3:GetObject on the artifact prefix) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 54 36 Tm
+(Page 2 of 5) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 2172 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 54 742 Tm
+(  - s3:PutObject on the artifact prefix) Tj
+0 -14 Td
+(  - s3:DeleteObject on the artifact prefix, if you need deletion) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Prefer a bucket-specific policy instead of AmazonS3FullAccess.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 4: Launch compute for MLflow) Tj
+0 -14 Td
+(Simple learning setup:) Tj
+0 -14 Td
+(  - EC2 Ubuntu instance) Tj
+0 -14 Td
+(  - attach IAM role) Tj
+0 -14 Td
+(  - install Python, pip, venv) Tj
+0 -14 Td
+(  - install mlflow, boto3, psycopg2-binary) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Example packages:) Tj
+0 -14 Td
+(  pip install mlflow boto3 psycopg2-binary) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 5: Start the MLflow server) Tj
+0 -14 Td
+(Use PostgreSQL/MySQL as backend and S3 as artifact root.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Example command:) Tj
+0 -14 Td
+(  mlflow server \\) Tj
+0 -14 Td
+(    --backend-store-uri postgresql://USER:PASSWORD@RDS_ENDPOINT:5432/mlflowdb \\) Tj
+0 -14 Td
+(    --default-artifact-root s3://your-mlflow-bucket/mlflow-artifacts \\) Tj
+0 -14 Td
+(    --host 0.0.0.0 \\) Tj
+0 -14 Td
+(    --port 5000) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(For a quick learning-only setup, this is easier but less durable:) Tj
+0 -14 Td
+(  mlflow server \\) Tj
+0 -14 Td
+(    --backend-store-uri ./mlruns \\) Tj
+0 -14 Td
+(    --default-artifact-root s3://your-mlflow-bucket/mlflow-artifacts \\) Tj
+0 -14 Td
+(    --host 0.0.0.0 \\) Tj
+0 -14 Td
+(    --port 5000) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 6: Protect the MLflow UI) Tj
+0 -14 Td
+(Do not leave port 5000 open to everyone.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Safer options:) Tj
+0 -14 Td
+(  - allow only your IP in the EC2 security group) Tj
+0 -14 Td
+(  - access through VPN) Tj
+0 -14 Td
+(  - put Nginx in front with authentication) Tj
+0 -14 Td
+(  - expose through internal load balancer) Tj
+0 -14 Td
+(  - use HTTPS/TLS) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 7: Connect training code to MLflow) Tj
+0 -14 Td
+(In your training/evaluation script:) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(  import mlflow) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(  mlflow.set_tracking_uri\("http://YOUR_SERVER:5000"\)) Tj
+0 -14 Td
+(  mlflow.set_experiment\("m5-forecasting"\)) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 54 36 Tm
+(Page 3 of 5) Tj
+ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 2359 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 54 742 Tm
+() Tj
+0 -14 Td
+(  with mlflow.start_run\(\):) Tj
+0 -14 Td
+(      mlflow.log_param\("model", "lightgbm"\)) Tj
+0 -14 Td
+(      mlflow.log_metric\("rmse", rmse\)) Tj
+0 -14 Td
+(      mlflow.log_artifact\("reports/evaluation.json"\)) Tj
+0 -14 Td
+(      mlflow.sklearn.log_model\(model, "model"\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 8: Save models correctly) Tj
+0 -14 Td
+(Common choices:) Tj
+0 -14 Td
+(  - sklearn pipeline: .joblib or mlflow.sklearn.log_model) Tj
+0 -14 Td
+(  - LightGBM: native model text file or mlflow.lightgbm.log_model) Tj
+0 -14 Td
+(  - XGBoost: native model file or mlflow.xgboost.log_model) Tj
+0 -14 Td
+(  - deep learning: framework-specific format plus MLflow flavor) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 9: Track data separately with DVC) Tj
+0 -14 Td
+(Use DVC for large datasets and feature tables.) Tj
+0 -14 Td
+(Use MLflow for experiment runs, metrics, models, and evaluation artifacts.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Recommended split:) Tj
+0 -14 Td
+(  - raw/processed data: DVC + S3/local DVC remote) Tj
+0 -14 Td
+(  - experiments/metrics/models: MLflow) Tj
+0 -14 Td
+(  - code: GitHub) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Step 10: Production hardening checklist) Tj
+0 -14 Td
+(  - RDS backups enabled) Tj
+0 -14 Td
+(  - S3 versioning enabled) Tj
+0 -14 Td
+(  - IAM least privilege) Tj
+0 -14 Td
+(  - no public S3 bucket) Tj
+0 -14 Td
+(  - MLflow UI protected) Tj
+0 -14 Td
+(  - secrets not committed to Git) Tj
+0 -14 Td
+(  - server runs as a service or container, not only inside a terminal session) Tj
+0 -14 Td
+(  - logs sent to CloudWatch or saved clearly) Tj
+0 -14 Td
+(  - infrastructure documented or managed with Terraform/CDK later) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Best Recommendation for Your Current Situation) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Phase 1: Local learning) Tj
+0 -14 Td
+(  - Run MLflow locally with mlflow ui.) Tj
+0 -14 Td
+(  - Log metrics and models from your scripts.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Phase 2: Good portfolio setup) Tj
+0 -14 Td
+(  - EC2 for MLflow server.) Tj
+0 -14 Td
+(  - S3 for artifact root.) Tj
+0 -14 Td
+(  - SQLite or PostgreSQL backend.) Tj
+0 -14 Td
+(  - Security group limited to your IP.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Phase 3: More industry-style setup) Tj
+0 -14 Td
+(  - ECS or EC2 for MLflow server.) Tj
+0 -14 Td
+(  - RDS PostgreSQL backend.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 54 36 Tm
+(Page 4 of 5) Tj
+ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 1019 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 54 742 Tm
+(  - S3 artifact root.) Tj
+0 -14 Td
+(  - IAM role with least privilege.) Tj
+0 -14 Td
+(  - Nginx/reverse proxy or private network access.) Tj
+0 -14 Td
+(  - HTTPS and authentication.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Common Mistakes to Avoid) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(1. Using only ./mlruns on EC2 for serious work.) Tj
+0 -14 Td
+(   It is easy, but not durable enough for important metadata.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(2. Giving AmazonS3FullAccess.) Tj
+0 -14 Td
+(   It works, but it is too broad for production.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3. Opening port 5000 to the whole internet.) Tj
+0 -14 Td
+(   MLflow should be protected.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(4. Storing AWS keys in code.) Tj
+0 -14 Td
+(   Use IAM roles or environment/secrets management.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5. Confusing DVC and MLflow.) Tj
+0 -14 Td
+(   DVC tracks data and pipeline artifacts. MLflow tracks experiments, metrics, and ) Tj
+0 -14 Td
+(   models.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 54 36 Tm
+(Page 5 of 5) Tj
+ET
+endstream
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000141 00000 n 
+0000000209 00000 n 
+0000000335 00000 n 
+0000002460 00000 n 
+0000002586 00000 n 
+0000004882 00000 n 
+0000005008 00000 n 
+0000007232 00000 n 
+0000007360 00000 n 
+0000009772 00000 n 
+0000009900 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+10972
+%%EOF
