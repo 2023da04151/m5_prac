@@ -22,11 +22,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install ruff mypy
-          python -m pip install -e .
+          python -m pip install -e . ruff mypy "pandas-stubs>=2.3.0" "types-PyYAML>=6.0.12"
 
       - name: Run Ruff
-        run: python -m ruff check src
+        run: python -m ruff check .
 
       - name: Run mypy
-        run: python -m mypy src
+        run: python -m mypy .
