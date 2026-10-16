@@ -12,8 +12,8 @@ This creates intermediate pickle files under data/processed/.
 The full M5 dataset is large, so run this with enough RAM.
 """
 
-from pathlib import Path
 import logging
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
