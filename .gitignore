@@ -11,4 +11,9 @@ wheels/
 .env
 dvc_data/
 data/
+!data/
+data/*
+!data/processed/
+data/processed/*
+!data/processed/prediction_features.csv
 /experiment_info.json
