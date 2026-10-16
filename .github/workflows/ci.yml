@@ -31,7 +31,7 @@ jobs:
         run: python -m mypy .
   push-to-ecr:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: checks-and-build
+    needs: checks
     runs-on: ubuntu-latest
 
     permissions:
