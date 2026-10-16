@@ -1,0 +1,11 @@
+**
+!Dockerfile
+!.dockerignore
+!requirements-app.txt
+!m5_app.py
+!prediction_requests.csv
+!models/
+!models/non_recur_CA_1_cv4_meta.json
+!data/
+!data/processed/
+!data/processed/prediction_features.csv
